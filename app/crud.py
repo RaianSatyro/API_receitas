@@ -2,11 +2,21 @@ from sqlalchemy.orm import Session
 from . import models, schemas
 
 def criar_receita(db: Session, receita: schemas.ReceitaCreate):
-    db_receita = models.ReceitaDB(**receita.dict())
+    """
+    Cria uma nova receita no banco de dados.
+    """
+    db_receita = models.ReceitaDB(  # Use ReceitaDB (ou o nome correto da sua classe)
+        nome=receita.nome,
+        ingredientes=receita.ingredientes,
+        tempo_preparo=receita.tempo_preparo,
+        modo_preparo=receita.modo_preparo,
+        url_imagem=str(receita.url_imagem) if receita.url_imagem else None,
+        url_video=str(receita.url_video) if receita.url_video else None
+    )
     db.add(db_receita)
     db.commit()
     db.refresh(db_receita)
-    return db_receita
+    return db_receita 
 
 def ler_receita(db: Session, receita_id: int):
     return db.query(models.ReceitaDB).filter(models.ReceitaDB.id == receita_id).first()
