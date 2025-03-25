@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from app.api import router as api_router
+from fastapi.middleware.cors import CORSMiddleware
 import logging
 
 # Configuração do logging
@@ -9,6 +10,14 @@ logging.info("API Iniciando...")
 
 app = FastAPI()
 logging.info("Instância FastAPI criada.")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Origem permitida (se quiser, pode colocar "*" para todas as origens)
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos os métodos HTTP
+    allow_headers=["*"],  # Permite todos os cabeçalhos
+)
 
 # Inclua o router da API
 try:
